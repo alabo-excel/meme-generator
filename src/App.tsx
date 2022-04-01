@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const App: React.FC = () => {
   interface IData {
@@ -11,18 +11,17 @@ const App: React.FC = () => {
   }
 
   const [memes, setMemes] = useState<IData | any>([])
-  fetch('https://api.imgflip.com/get_memes')
-    .then(response => response.json())
-    .then(data => setMemes(data.data.memes))
-    .then(errors => console.log(errors))
 
-  // async function fetchMeme() {
-  //   const response = await fetch(`https://api.imgflip.com/get_memes`)
-  //   const json = await response.json();
-  //   // console.log(json)
-  //   return setMemes(json.data.memes);
-  // }
-  // fetchMeme()
+  useEffect(() => {
+    async function fetchMeme() {
+      const response = await fetch(`https://api.imgflip.com/get_memes`)
+      const json = await response.json();
+      console.log(json)
+      return setMemes(json.data.memes);
+    }
+
+    fetchMeme()
+  }, [])
 
   const mapMeme = memes.map((meme: { name: string, url: string, id: number }) => {
     return (
